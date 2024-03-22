@@ -38,8 +38,12 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'user',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin'
+        ]
     ],
 
     /*
@@ -60,15 +64,14 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'user' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
     ],
 
     /*
@@ -80,7 +83,7 @@ return [
     | than one user table or model in the application and you want to have
     | separate password reset settings based on the specific user types.
     |
-    | The expire time is the number of minutes that each reset token will be
+    | The expiry time is the number of minutes that each reset token will be
     | considered valid. This security feature keeps tokens short-lived so
     | they have less time to be guessed. You may change this as needed.
     |
@@ -91,9 +94,15 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
-            'table' => 'password_reset_tokens',
+        'user' => [
+            'provider' => 'user',
+            'table' => 'user',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admin' => [
+            'provider' => 'admin',
+            'table' => 'admin',
             'expire' => 60,
             'throttle' => 60,
         ],
