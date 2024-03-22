@@ -2,6 +2,11 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AuthAdmin;
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\AuthUser;
+use App\Http\Middleware\CheckIsAdmin;
+use App\Http\Middleware\CheckLoginAdmin;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -14,6 +19,8 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
@@ -32,8 +39,8 @@ class Kernel extends HttpKernel
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+//            \Illuminate\Session\Middleware\StartSession::class,
+//            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -63,5 +70,9 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'auth.user' => AuthUser::class,
+        'auth.admin' => AuthAdmin::class,
+        'check.is.admin' => CheckIsAdmin::class,
+        'check.login.admin' => CheckLoginAdmin::class,
     ];
 }
